@@ -1,52 +1,58 @@
-// find longest palidrome string
-#include <iostream>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-string longestPalidromeStr(string s)
+bool checkPalidrome(string s)
 {
-    // find all the possible substring
-    vector<string> temp;
+    int i = 0, j = s.size() - 1;
 
-    for (int i = 0; i < s.size(); i++)
+    while (i <= j)
     {
-        for (int j = i; j < s.size(); j++)
+        if (s[i] != s[j])
         {
-            string tempStr="";
-            for (int k = i; k <= j; k++)
-            {
-                tempStr+=s[k];
-            }
-            temp.push_back(tempStr);
+            return false;
+        }
+        else
+        {
+            i++, j--;
+        }
+    }
+    return true;
+}
+string solve(string &s, int i, int n, string ans, int maxi)
+{
+    // base case
+    if (i >= n)
+    {
+        if (ans.size() > maxi && checkPalidrome(ans))
+        {
+                maxi=ans.size();
+               return ans;
+        }
+        else
+        {
+            return "";
         }
     }
 
-    int max=0;
-    string ans;
-    for(int i=0;i<temp.size();i++){
-        string data=temp[i];
-        bool flag=true;
-        int k=0,j=data.size()-1;
-        while (k<=j)
-        {
-            if(max<data.size()){
-                if(data[k++]!=data[j--]){
-                    flag=false;
-                }
-            }
-        }
-        if(flag==true){
-            max=data.size();
-            ans=data;
-        }
+    string include= solve(s,i+1,n,ans+s[i],maxi);
+    string exclude= solve(s,i+1,n,ans,maxi);
+
+    if(include.size() >= exclude.size()){
+        return include;
+    }else{
+        return exclude;
     }
-    return ans;
+}
+string longestPalindrome(string s)
+{
+    int n = s.size();
+    int start = 0;
+    string ans = "";
+    return solve(s, start, n, ans, 0);
+    
 }
 
 int main()
 {
-
-    string s = "babad";
-    int n = s.size();
-    cout<<longestPalidromeStr(s);
+    cout << longestPalindrome("cbbd");
 }
