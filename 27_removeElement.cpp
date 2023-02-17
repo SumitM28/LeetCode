@@ -19,7 +19,7 @@ int removeElement(vector<int> &nums, int val)
         }
         else
         {
-            i++;
+            s++;
         }
     }
     return s;
